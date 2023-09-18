@@ -1,4 +1,6 @@
 require 'cgi'
+require 'net/http'
+require 'json'
 
 class MappingsController < ApplicationController
   include ActionView::Helpers::NumberHelper
@@ -74,23 +76,80 @@ class MappingsController < ApplicationController
                        "source_contact_info": 'orcid:1234,orcid:5678',
                        "date": '2020-05-30'
                      }]
-    render partial: 'mappings/bulk_loader/loader'
+    render partial: 'mappings/bulk_loader/upload'
   end
 
   def loader_process
-    response = LinkedData::Client::HTTP.post('/mappings/load', file: params[:file])
-    errors = response.errors
-    errors = errors.to_h.except(:links, :context) if errors
+    # response = LinkedData::Client::HTTP.post('/mappings/load', file: params[:file])
+    # errors = response.errors
+    # errors = errors.to_h.except(:links, :context) if errors
 
-    created = response.created
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.replace('file_loader_result',
-                                                  partial: 'mappings/bulk_loader/loaded_mappings',
-                                                  locals: { errors: errors, created: created })
+    # created = response.created
+    # respond_to do |format|
+    #   format.turbo_stream do
+    #     render turbo_stream: turbo_stream.replace('file_loader_result',
+    #                                               partial: 'mappings/bulk_loader/loaded_mappings',
+    #                                               locals: { errors: errors, created: created })
+    #   end
+    #   format.html { redirect_to mappings_path }
+    # end
+    if params[:mappingsFile].present?    
+
+    # Access the uploaded file
+    uploaded_file = params[:mappingsFile]
+
+
+    # Check if the file is a JSON file
+    if uploaded_file.content_type == 'application/json'
+      # You can now access the file content using uploaded_file.read
+      file_content = uploaded_file.read
+
+      # Send the file_content to the desired endpoint
+      response = send_file_content(file_content)
+
+      puts "response : #{response.inspect}"
+
+      if response.code.to_i == 200
+        # Handle a successful response
+        flash[:notice] = 'File uploaded and processed successfully!'
+      else
+        # Handle errors or failures
+        flash[:alert] = 'Error uploading and processing the file.'
       end
-      format.html { redirect_to mappings_path }
+    else
+      flash[:alert] = 'Invalid file format. Please upload a JSON file.'
     end
+  else
+    flash[:alert] = 'No file selected. Please choose a file to upload.'
+  end
+
+  # Redirect to the appropriate page or render a response as needed
+  # Redirect to the page where the modal was triggered, for example
+  redirect_back fallback_location: root_path
+  end
+
+  def send_file_content(file_content)
+  
+        # Define the endpoint URL
+    endpoint_url = URI.parse('http://localhost:2500/bulk?apikey=23075fb5-0559-4cb1-9888-742ea7b27e6f&username=nass')
+
+    # Create a hash to represent the request body with the 'mappingsFile' field
+    request_body = { 'mappingsFile' => file_content }
+
+    # Convert the request body to JSON
+    request_body_json = request_body.to_json
+
+    # Create an HTTP POST request
+    request = Net::HTTP::Post.new(endpoint_url)
+    request.body = request_body_json
+    request.content_type = 'application/json'
+
+    # Send the request
+    response = Net::HTTP.start(endpoint_url.hostname, endpoint_url.port) do |http|
+      http.request(request)
+    end
+
+    response
   end
 
   def show

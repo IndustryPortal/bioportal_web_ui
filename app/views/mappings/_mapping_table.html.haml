@@ -12,20 +12,35 @@
 = check_box_tag "delete_mappings_permission", @delete_mapping_permission, @delete_mapping_permission, style: "display: none;"
 %div#concept_mappings_tables_div
   = render_alerts_container(MappingsController)
-  %table#concept_mappings_table.zebra{width: "100%", style:'word-break: break-word'}
-    %thead
-      %tr
-        %th Mapping To
-        %th{width: "30%"} Ontology
-        %th Relations
-        %th Source
-        %th Type
-        %th{:class => 'delete_mappings_column'} Actions
-    %tbody#concept_mappings_table_content
-      - @mappings.each do |map|
-        = render partial: 'mappings/show_line' , locals: {map: map, concept: @concept}
-      %tr.empty-state
-        %td.text-center{:colspan => "6"} There are currently no  mappings for this class.
+
+- grouped_mappings = @mappings.group_by { |mapping| ['LOOM', 'SAME_URI'].include?(mapping[:source]) ? 'LOOM/SAME_URI' : mapping[:source] }
+
+- if @mappings.empty?
+  %p There are currently no mappings available for this class.
+- else
+- grouped_mappings.each do |source, mappings_for_source|
+  - if mappings_for_source.any?
+  - puts "source is:"
+    - puts source
+    - if source == "LOOM/SAME_URI"
+      %h2{style: 'margin-top: 20px;'}= "Portal mappings"
+    - else
+      %h2{style: 'margin-top: 20px;'}= "#{mappings_for_source.first.process.to_h[:source_name]} mappings"
+    %table#concept_mappings_table.zebra{width: "100%", style:'word-break: break-word'}
+      %thead
+        %tr
+          %th Mapping To
+          %th{width: "30%"} Ontology
+          %th Relations
+          %th Source
+          %th Type
+          %th{:class => 'delete_mappings_column'} Actions
+      %tbody#concept_mappings_table_content
+        - mappings_for_source.each do |map|
+          - puts "mapping for source:"
+          - puts map.inspect
+          = render partial: 'mappings/show_line', locals: { map: map, concept: @concept }
+
 :javascript
   jQuery(document).ready(function(){
     ajax_process_init();

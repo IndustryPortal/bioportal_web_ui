@@ -1,5 +1,7 @@
+= render 'mappings/show_mapping_details'
 - process = map.process || {}
 - source = "#{map.source} #{process[:source_name]}"
+- class_id = map.classes.first.id
 - relations = process[:relation]&.each { |relation| get_prefixed_uri(relation)}
 - map_id = map.id.to_s.split("/").last
 - target_concept = map.classes.select {|target_concept| target_concept.id != concept.id && target_concept.links['ontology'] != concept.links['ontology']}.first || map.classes.last
@@ -26,8 +28,8 @@
   - ont_name = target_concept.links['ontology']
   - ont_link = link_to ont_name, target_concept.links['ontology'], target: "_blank"
   - type = 'External'
-  
-%tr.human{:id => map_id}
+
+%tr.human{:id => map_id,'data-toggle' => 'modal', 'data-source' => source, 'data-source-uri' => class_id, 'data-relation-uri' => (relations&.join('_')), 'data-target-uri' => target_concept.id}
   %td
     = cls_link
   %td
@@ -43,6 +45,7 @@
         %img{:src => asset_path('sifr/english_language_flag.png'), :style => "padding: 5px", :align => "right", :title => "Traduction"}
   %td
     = type
+
   %td{:class => 'delete_mappings_column'}
     - if map.id && !map.id.empty? && session[:user] && (session[:user].id.to_i == map.creator || session[:user].admin?) && map.source.eql?('REST')
       %div.d-flex
@@ -53,3 +56,65 @@
                 data: { modal_title_value: "Edit mapping for #{@concept.prefLabel}" },
                 )
         = button_to "Delete", CGI.unescape(mapping_path(map.id)), method: :delete, class:'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
+
+:javascript
+  $(document).ready(function(){
+    $('.human').click(function() {
+      // Extract data from data attributes
+      var source = $(this).data('source'); 
+      var sourceUri = $(this).data('source-uri');
+      var relationUri = $(this).data('relation-uri');
+      var targetUri = $(this).data('target-uri');
+      console.log("source:", sourceUri, relationUri,  targetUri)
+      
+
+      // Construct the URL
+      var apiUrl = 'http://localhost:2500/mapping/byId?' +
+        'apikey=23075fb5-0559-4cb1-9888-742ea7b27e6f' +
+        '&username=nass' +
+        '&id=' + sourceUri + '_' + relationUri + '_' + targetUri;
+
+      // Send a request to the constructed URL
+      // You can use jQuery's $.ajax or $.get methods here
+
+
+      $.get(apiUrl, function(data) {
+        // Handle the response data as needed
+        console.log(data);
+        
+        var uiData = data;
+        delete uiData['id'];
+        delete uiData['mapping_id'];
+        //$('#mappingDetails').html('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
+
+  var htmlContent = '<table id="concept_mappings_table" class="zebra" width="100%" style="word-break: break-word">';
+  htmlContent += '<thead><tr>';
+
+  // Create table headers dynamically based on JSON keys
+  for (var key in uiData) {
+    if (uiData.hasOwnProperty(key)) {
+      htmlContent += '<th>' + key + '</th>';
+    }
+  }
+
+  htmlContent += '</tr></thead><tbody id="concept_mappings_table_content"><tr>';
+
+  // Create table cells dynamically based on JSON values
+  for (var key in uiData) {
+    if (uiData.hasOwnProperty(key)) {
+      htmlContent += '<td>' + uiData[key] + '</td>';
+    }
+  }
+
+  htmlContent += '</tr></tbody></table>';
+
+  // Set the HTML content to the mappingDetails element
+  $('#mappingDetails').html(htmlContent);
+
+      // Show the modal
+        $('#mappingModal').modal('show');
+      });
+      
+      
+    });
+  })

@@ -12,8 +12,49 @@
               %pre
                 %code
                   = JSON.pretty_generate @example_code
-        = form_with url: '/mappings/loader', method: :post, multipart: true, data: { turbo: true} do
-          %div
-            = render FileInputLoaderComponent.new(name: :file)
-          %button.btn.btn-secondary.btn-block.mt-2{type:'submit'}
-            Save
+
+    %div#upload-form
+      %div
+        %input#file-input{"type" => "file", "accept" => ".json"}
+      %button.btn.btn-secondary.btn-block.mt-2.upload-button{type: 'button', id: 'upload-button'}
+        Upload
+
+:javascript
+  $(document).ready(function() {
+     console.log('Document is ready.');
+    $('.upload-button').click(function() {
+      console.log("upload clicked")
+      // Trigger the file input
+      $('#file-input').click();
+    });
+
+    $('#file-input').change(function() {
+      console.log("uploading file")
+      var fileInput = document.getElementById('file-input');
+      var file = fileInput.files[0];
+
+      if (file) {
+        var formData = new FormData();
+        formData.append('file', file);
+
+        // Send the file to the desired endpoint
+        $.ajax({
+          url: 'http://localhost:2500/bulk?apikey=23075fb5-0559-4cb1-9888-742ea7b27e6f&username=nass',
+          method: 'POST',
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function(response) {
+            // Handle success
+            console.log('File uploaded and processed successfully:', response);
+
+            // You can update the UI or display a message here
+          },
+          error: function() {
+            // Handle errors
+            console.error('Error uploading and processing the file.');
+          }
+        });
+      }
+    });
+  });

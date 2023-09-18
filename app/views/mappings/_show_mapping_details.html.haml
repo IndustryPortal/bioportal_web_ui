@@ -1,0 +1,50 @@
+#mappingModal.modal.fade{:tabindex => "-1", :role => "document", :aria => {:labelledby => "mappingModalLabel"}, :aria => {:hidden => "true"}, style: "margin-top: 10vh;"}
+  .modal-dialog.modal-lg{:role => "document", style: "max-width: 90vw; "}
+    .modal-content
+      .modal-header
+        %h5#mappingModalLabel.modal-title Mapping Details
+        %button.close{"data-bs-dismiss" => "modal", :aria => {:label => "Close"}}
+          %span{"aria-hidden" => "true"} 
+      .modal-body.table-responsive 
+        %div#mappingDetails
+          -# Data from the API response will be displayed here
+      .modal-footer
+
+:javascript
+  $(document).ready(function(){
+    $('.human').click(function() {
+      // ...
+
+      $.get(apiUrl, function(data) {
+        // Handle the response data as needed
+        console.log(data);
+        
+        // Populate the editing modal with data
+        $('#subjectLabel').val(data.subject_label);
+        $('#predicateLabel').val(data.predicate_label);
+        $('#objectLabel').val(data.object_label);
+        $('#comment').val(data.comment);
+
+        // Show the editing modal
+        $('#editMappingModal').modal('show');
+      });
+    });
+    
+    // Handle the "Save Changes" button in the editing modal
+    $('#saveChangesBtn').click(function() {
+      // Extract the edited values from input fields
+      var editedData = {
+        subject_label: $('#subjectLabel').val(),
+        predicate_label: $('#predicateLabel').val(),
+        object_label: $('#objectLabel').val(),
+        comment: $('#comment').val(),
+        // Add other fields as needed
+      };
+
+      // Send the edited data to the server to save changes
+      // You can use AJAX or other methods to update the mapping data
+
+      // Close the editing modal
+      $('#editMappingModal').modal('hide');
+    });
+  });
