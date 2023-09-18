@@ -107,6 +107,12 @@ class MappingsController < ApplicationController
       # Send the file_content to the desired endpoint
       response = send_file_content(file_content)
 
+
+      flash[:notice] = 'File uploaded and processed successfully!'
+
+      redirect_back fallback_location: root_path
+
+
       puts "response : #{response.inspect}"
 
       if response.code.to_i == 200
