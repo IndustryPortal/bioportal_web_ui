@@ -17,6 +17,7 @@
 development:
   adapter: mysql2
   encoding: utf8
+  socket: /opt/lampp/var/mysql/mysql.sock
   database: bioportal_ui
   username: bp_user
   password: bp_user!!!

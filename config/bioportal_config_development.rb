@@ -231,10 +231,19 @@ $TEAM_MEMBERS = [
     isEmailPro: true
   },
   {
-    name: "Bouchemel Nasreddine, MS",
+    name: "Nasreddine Bouchemel, MS",
     role: "",
     link: "https://github.com/Bouchemel-Nasreddine",
     avatar: 'https://github.com/IndustryPortal/bioportal_web_ui/blob/master/app/assets/images/team/nasreddine_avatar.jpg?raw=true',
+    description: "Software Engineer",
+    email: "kn_bouchemel@esi.dz",
+    isEmailPro: true
+  },
+  {
+    name: "Thierry Louge, PhD",
+    role: "",
+    link: "",
+    avatar: 'https://github.com/IndustryPortal/bioportal_web_ui/blob/master/app/assets/images/team/person.png?raw=true',
     description: "Software Engineer",
     email: "kn_bouchemel@esi.dz",
     isEmailPro: true

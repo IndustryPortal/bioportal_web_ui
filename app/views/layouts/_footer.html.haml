@@ -8,7 +8,8 @@
         %h6 PRODUCTS
         %ul.list-unstyled
           %li= link_to('IndustryPortal', root_path())
-          %li= link_to('IndustryPortal REST API', 'http://data.bioontology.org/documentation', target: '_blank')
+          %li= link_to('Ontoportal', 'https://ontoportal.org/', target: '_blank')
+          %li= link_to('IndustryPortal REST API', 'http://data.industryportal.test.enit.fr', target: '_blank')
           %li= link_to('BioPortal Virtual Appliance', 'https://www.bioontology.org/wiki/index.php/Category:NCBO_Virtual_Appliance', target: '_blank')
           %li= link_to('NCBO Web Widgets', 'http://www.bioontology.org/wiki/index.php/NCBO_Widgets', target: '_blank')
       %div.col-6.col-md.footer-support
@@ -16,6 +17,7 @@
         %ul.list-unstyled
           %li= link_to('Contact Us', feedback_path(location: encode_param(request.url)), class: 'pop_window')
           %li= link_to('Documentation', 'https://industryportal.github.io/', target: '_blank')
+          %li= link_to('REST API documentation',  'http://data.bioontology.org/documentation', target: '_blank')
           %li= link_to('NCBO Wiki', 'https://www.bioontology.org/wiki/', target: '_blank')
       %div.col-6.col-md
         %h6 ABOUT
