@@ -137,7 +137,8 @@ class MappingsController < ApplicationController
   def send_file_content(file_content)
   
         # Define the endpoint URL
-    endpoint_url = URI.parse('http://industryportal.test.enit.fr/ontomapper/bulk?apikey=23075fb5-0559-4cb1-9888-742ea7b27e6f&username=nass')
+        ontomapper_url = $ONTOMAPPER_URL
+    endpoint_url = URI.parse("#{ontomapper_url}/bulk?apikey=23075fb5-0559-4cb1-9888-742ea7b27e6f&username=nass")
 
     # Create a hash to represent the request body with the 'mappingsFile' field
     request_body = { 'mappingsFile' => file_content }

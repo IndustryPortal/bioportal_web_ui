@@ -13,7 +13,7 @@ require_relative 'site_config.rb' if File.exist?('config/site_config.rb')
 # Ideally it should be set to HOSTNAME but we fall back to using IP address if HOSTNAME is not manually set.
 $REST_HOSTNAME ||= "data.industryportal.test.enit.fr"
 $REST_PORT ||= ''
-$UI_HOSTNAME ||= "industryportal.enit.fr"
+$UI_HOSTNAME ||= "industryportal.test.enit.fr"
 $REST_URL_PREFIX ||= "http://#{$REST_HOSTNAME}/"
 #$REST_HOSTNAME ||= "industryportal.test.enit.fr"
 #$REST_PORT ||= '8080'
@@ -263,4 +263,4 @@ $CONTRIBUTORS = [
 $UI_THEME = :industryportal
 
 #OntoMapper Url
-$ONTOMAPPER_URL = "http://localhost:2500"
+$ONTOMAPPER_URL = "http://#{$UI_HOSTNAME}/ontomapper/"
