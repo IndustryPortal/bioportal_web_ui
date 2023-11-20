@@ -1,0 +1,7 @@
+= turbo_frame_tag 'application_modal_content' do
+  = form_tag('/mappings/loader_process', method: :post, multipart: true, id: 'upload-form') do
+    .d-flex.flex-column{:style => "overflow: auto; max-height: 600px;"}
+      %div
+        %input#file-input{"type" => "file", "accept" => ".json", "name" => "mappingsFile"}
+      %button.btn.btn-secondary.btn-block.mt-2.upload-button{type: 'submit', id: 'upload-button'}
+        Send

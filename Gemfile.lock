@@ -250,6 +250,8 @@ GEM
     rack (2.2.6.2)
     rack-accept (0.4.5)
       rack (>= 0.4)
+    rack-cors (1.0.6)
+      rack (>= 1.6.0)
     rack-mini-profiler (3.0.0)
       rack (>= 1.2.0)
     rack-test (2.0.2)
@@ -460,6 +462,7 @@ DEPENDENCIES
   pry
   psych (< 4)
   puma (~> 5.0)
+  rack-cors
   rack-mini-profiler
   rails (= 7.0.3)
   rails_autolink

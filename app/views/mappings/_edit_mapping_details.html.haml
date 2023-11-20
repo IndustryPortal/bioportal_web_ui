@@ -1,0 +1,24 @@
+#editMappingModal.modal.fade{:tabindex => "-1", :role => "dialog", :aria => {:labelledby => "editMappingModalLabel"}, :aria => {:hidden => "true"}}
+  .modal-dialog.modal-lg{:role => "document", style: "max-width: 90vw;"}
+    .modal-content
+      .modal-header
+        %h5#editMappingModalLabel.modal-title Edit Mapping
+        %button.close{"data-bs-dismiss" => "modal", :aria => {:label => "Close"}}
+          %span{"aria-hidden" => "true"} ×
+      .modal-body
+        %form#editMappingForm
+          .mb-3
+            %label{:for => "subjectLabel", :class => "form-label"} Subject Label
+            %input#subjectLabel.form-control{:type => "text", :name => "subjectLabel", :value => ""}
+          .mb-3
+            %label{:for => "predicateLabel", :class => "form-label"} Predicate Label
+            %input#predicateLabel.form-control{:type => "text", :name => "predicateLabel", :value => ""}
+          .mb-3
+            %label{:for => "objectLabel", :class => "form-label"} Object Label
+            %input#objectLabel.form-control{:type => "text", :name => "objectLabel", :value => ""}
+          .mb-3
+            %label{:for => "comment", :class => "form-label"} Comment
+            %textarea#comment.form-control{:name => "comment", :rows => "3", :placeholder => "Add a comment..."}
+      .modal-footer
+        %button.btn.btn-secondary{"data-bs-dismiss" => "modal"} Close
+        %button#saveChangesBtn.btn.btn-primary Save Changes

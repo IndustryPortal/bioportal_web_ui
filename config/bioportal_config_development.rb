@@ -11,10 +11,14 @@ require_relative 'site_config.rb' if File.exist?('config/site_config.rb')
 
 # Appliance needs to know its own address to display proper URLs
 # Ideally it should be set to HOSTNAME but we fall back to using IP address if HOSTNAME is not manually set.
-$REST_HOSTNAME ||= "data.industryportal.enit.fr"
+$REST_HOSTNAME ||= "data.industryportal.test.enit.fr"
 $REST_PORT ||= ''
-$UI_HOSTNAME ||= "industryportal.enit.fr"
+$UI_HOSTNAME ||= "industryportal.test.enit.fr"
 $REST_URL_PREFIX ||= "http://#{$REST_HOSTNAME}/"
+#$REST_HOSTNAME ||= "industryportal.test.enit.fr"
+#$REST_PORT ||= '8080'
+#$UI_HOSTNAME ||= "industryportal.test.enit.fr"
+#$REST_URL_PREFIX ||= "http://#{$REST_HOSTNAME}:#{$REST_PORT}/"
 
 # Organization info
 #$ORG = 'Ontoportal Appliance'
@@ -51,7 +55,8 @@ $RESOURCE_INDEX_DISABLED = true
 
 # Unique string representing the UI's id for use with the BioPortal Core
 #$API_KEY ||= '1de0a270-29c5-4dda-b043-7c3580628cd5'
-$API_KEY ||= '019adb70-1d64-41b7-8f6e-8f7e5eb54942'
+#$API_KEY ||= '019adb70-1d64-41b7-8f6e-8f7e5eb54942'
+$API_KEY ||= '6ed1c997-384c-422f-ad07-2b0b64f2f064'
 # Max number of children to return when rendering a tree view
 $MAX_CHILDREN = 2500
 
@@ -265,3 +270,6 @@ $CONTRIBUTORS = [
 
 #Changing app theme to make it look just like
 $UI_THEME = :industryportal
+
+#OntoMapper Url
+$ONTOMAPPER_URL = "http://#{$UI_HOSTNAME}/ontomapper/"

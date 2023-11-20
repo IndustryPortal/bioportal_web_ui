@@ -1,4 +1,6 @@
 require 'cgi'
+require 'net/http'
+
 
 class ConceptsController < ApplicationController
   include MappingsHelper
@@ -151,6 +153,47 @@ class ConceptsController < ApplicationController
     render partial: "biomixer", layout: false
   end
 
+  def fetch_mappings(acronym, class_uri)
+    # Retrieve the URL and API key from the configuration file
+    ontomapper_url = $ONTOMAPPER_URL
+    puts "ontomapper url is: #{ontomapper_url} "
+
+    # Build the API endpoint URL
+    endpoint_url = "#{ontomapper_url}/manchester/#{acronym}/getClassRelations?username=nass&apikey=23075fb5-0559-4cb1-9888-742ea7b27e6f&classUri=#{CGI.escape(class_uri)}"
+
+
+    puts "endpoint url is: #{endpoint_url} "
+
+    # Send a GET request to the API endpoint
+    uri = URI(endpoint_url)
+    response = Net::HTTP.get(uri)
+
+    # Parse the JSON response    
+    #@ontomappings = JSON.parse(response)
+
+    puts "response is: #{response}"
+
+    @ontomappings = JSON.parse(response)
+
+    #proccessing the mappings bodies to replace !!!label(classUri with <a href=classUri>label</a>)
+    @ontomappings .each do |m|
+      m["body"].scan(/!!!([^()]+)\(([^()]+)\)/).each do |label, classUri|
+        m["body"].gsub!("!!!#{label}(#{classUri})", "<a href=\"#{classUri}\">#{label}</a>")
+      end    
+    end
+
+
+    # Return the mappings
+    @ontomappings
+    puts "mappings are: #{@ontomappings} "
+  end
+
+  def sanitize_html(html)
+    allowed_attributes = Rails::Html::SafeListSanitizer.allowed_attributes.merge('a' => ['href'])
+    sanitized_html = sanitize(html, attributes: allowed_attributes)
+    sanitized_html
+  end
+
 # PRIVATE -----------------------------------------
 private
 
@@ -177,6 +220,7 @@ private
     @notes = @concept.explore.notes
     @delete_mapping_permission = check_delete_mapping_permission(@mappings)
     update_tab(@ontology, @concept.id) #updates the 'history' tab with the current node
+    fetch_mappings(@ontology.acronym, @concept.id)
   end
 
   def build_tree
