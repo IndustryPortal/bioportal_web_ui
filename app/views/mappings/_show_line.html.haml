@@ -57,6 +57,7 @@
                 )
         = button_to "Delete", CGI.unescape(mapping_path(map.id)), method: :delete, class:'btn btn-link',  form: {data: { turbo: true, turbo_confirm: "Are you sure?", turbo_frame: '_top'}}
 
+%div#ontomapper-url{"data-url" => "#{$ONTOMAPPER_URL}"}
 :javascript
   $(document).ready(function(){
     $('.human').click(function() {
@@ -69,11 +70,13 @@
       
 
 
-      // Construct the URL
-      var apiUrl = 'http://industryportal.test.enit.fr/ontomapper/mapping/byId?' +
+       //Construct the URL
+      var apiUrl = $('#ontomapper-url').data('url') + '/mapping/byId?' +
         'apikey=23075fb5-0559-4cb1-9888-742ea7b27e6f' +
         '&username=nass' +
-        '&id=' + sourceUri + '_' + relationUri + '_' + targetUri;
+        '&id=' + encodeURIComponent(sourceUri + '_' + relationUri + '_' + targetUri);
+
+ 
 
       // Send a request to the constructed URL
       // You can use jQuery's $.ajax or $.get methods here

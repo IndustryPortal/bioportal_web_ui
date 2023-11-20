@@ -449,6 +449,7 @@ display_links: false, display_context: false)
     # Note: find_by_acronym includes ontology views
     @ontology = LinkedData::Client::Models::Ontology.find_by_acronym(params[:ontology][:acronym] || params[:id]).first
     @ontology.update_from_params(ontology_params)
+    @ontology.viewOf = '' if @ontology.isView.eql? "0"
     error_response = @ontology.update
     if error_response && (error_response.status != 204)
       @categories = LinkedData::Client::Models::Category.all

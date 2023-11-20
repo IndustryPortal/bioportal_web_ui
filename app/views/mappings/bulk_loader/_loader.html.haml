@@ -18,6 +18,7 @@
         %input#file-input{"type" => "file", "accept" => ".json"}
       %button.btn.btn-secondary.btn-block.mt-2.upload-button{type: 'button', id: 'upload-button'}
         Upload
+%div#ontomapper-url{"data-url" => "#{$ONTOMAPPER_URL}"}
 
 :javascript
   $(document).ready(function() {
@@ -37,9 +38,11 @@
         var formData = new FormData();
         formData.append('file', file);
 
+        var ontomapper_url = $('#ontomapper-url').data('url') + '/bulk?apikey=23075fb5-0559-4cb1-9888-742ea7b27e6f&username=nass'
+
         // Send the file to the desired endpoint
         $.ajax({
-          url: 'http://localhost:2500/bulk?apikey=23075fb5-0559-4cb1-9888-742ea7b27e6f&username=nass',
+          url: ontomapper_url,
           method: 'POST',
           data: formData,
           contentType: false,
