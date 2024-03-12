@@ -124,10 +124,9 @@ class UsersController < ApplicationController
     response = {errors: '', success: ''}
     @user = LinkedData::Client::Models::User.find(params[:id])
     @user = LinkedData::Client::Models::User.find_by_username(params[:id]).first if @user.nil?
-    if(session[:user].admin?)
+    if(session[:user].admin? || session[:user].id == @user.id)
       @user.delete
       response[:success] << 'User deleted successfully '
-
     else
       response[:errors] << 'Not permitted '
     end
@@ -204,6 +203,9 @@ class UsersController < ApplicationController
       if !verify_recaptcha
         errors << "Please fill in the proper text from the supplied image"
       end
+    end
+    if params[:privacy_policy_consent] != "1"
+      errors << "Please agree to the Privacy Policy"
     end
 
     return errors

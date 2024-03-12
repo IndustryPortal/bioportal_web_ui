@@ -186,8 +186,6 @@ display_context: false, include: browse_attributes)
     @submission = get_ontology_submission_ready(@ontology)
 
     get_class(params)
-    puts "classes: @concept = #{@concept.inspect}"
-    puts "classes: @root = #{@root}"
     @instances_concept_id = get_concept_id(params, @concept, @root)
 
     if ['application/ld+json', 'application/json'].include?(request.accept)

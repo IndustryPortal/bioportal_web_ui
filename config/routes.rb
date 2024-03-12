@@ -61,6 +61,7 @@ Rails.application.routes.draw do
   # Top-level pages
   match '/feedback', to: 'home#feedback', via: [:get, :post]
   get '/account' => 'home#account'
+  get '/register', to: 'users#new', as: :register
   get '/help' => 'home#help'
   get '/about' => 'home#about'
   get '/site_config' => 'home#site_config'
@@ -68,6 +69,8 @@ Rails.application.routes.draw do
   match '/validate_ontology_file' => 'home#validate_ontology_file', via: [:get, :post]
   get '/layout_partial/:partial' => 'home#render_layout_partial'
   match '/visits', to: 'visits#index', via: :get
+  get '/privacy_policy', to: 'privacy_policy#index'
+
 
   # Error pages
   match "/404", to: "errors#not_found", via: :all

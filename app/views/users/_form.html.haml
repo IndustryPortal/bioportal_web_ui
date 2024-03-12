@@ -27,12 +27,18 @@
   - unless $ANNOUNCE_LIST.nil? || $ANNOUNCE_LIST.empty?
     %tr
       %td{:colspan => "2", :style => "text-align: right;"}
-        %div{:style => "float: right; margin-left: 10px; position: relative; top: 5px;"}
-          %input#user_register_mail_list{:checked => "checked", :name => "user[register_mail_list]", :type => "checkbox", :value => "1"}/
-        %div{:style => "overflow: hidden; line-height: 12px;"}
-          %label{:for => "user_register_mail_list"}
-            Register for the #{$SITE} announcements email list
-            %br/
-            %span{:style => "font-size: x-small;"} (approximately two emails per month -- confirmation via email required)
+        %label{:for => "user_register_mail_list"}
+          Register for the #{$SITE} announcements email list
+          %br/
+          %span{:style => "font-size: x-small;"} (approximately two emails per month -- confirmation via email required)
+        %input#user_register_mail_list{:name => "user[register_mail_list]", :type => "checkbox", :value => "1"}/
+
+    %tr
+    %td{:colspan => "2",  :style => "text-align: right;"}
+      %label{:for => "privacy_policy_consent"}
+        I have read and agree to the 
+        = link_to "Privacy Policy", privacy_policy_path
+      %input#privacy_policy_consent{:type => "checkbox"}/
+
   %tr
     %td{:colspan => "2", :style => "text-align: right;"}= submit_tag "Create"

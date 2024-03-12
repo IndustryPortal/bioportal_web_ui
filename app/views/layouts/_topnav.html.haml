@@ -33,6 +33,8 @@
       - if session[:user].nil?
         %li.nav-item
           = link_to("Login", login_index_path(redirect: request.original_url), class: "btn btn-bp-login mr-md-2")
+        %li.nav-item
+          = link_to("Register", register_path(redirect: request.original_url), class: "btn btn-bp-login mr-md-2")
       - else
         -# Account menu
         %li.nav-item.dropdown

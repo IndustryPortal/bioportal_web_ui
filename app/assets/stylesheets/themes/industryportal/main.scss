@@ -132,6 +132,17 @@ textarea.error {
   }
 }
 
+.btn-bp-delete {
+  color: #fff;
+  background-color: #c91515;
+  border-color: #c91515 !important;
+
+  &:hover {
+    color: #fff;
+    background-color: #e41313;
+  }
+}
+
 .navbar-custom {
   background-color: $color-primary;
 }

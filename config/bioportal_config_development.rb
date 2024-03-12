@@ -11,10 +11,10 @@ require_relative 'site_config.rb' if File.exist?('config/site_config.rb')
 
 # Appliance needs to know its own address to display proper URLs
 # Ideally it should be set to HOSTNAME but we fall back to using IP address if HOSTNAME is not manually set.
-$REST_HOSTNAME ||= "data.industryportal.test.enit.fr"
+$REST_HOSTNAME ||= "data.industryportal.enit.fr"
 $REST_PORT ||= ''
-$UI_HOSTNAME ||= "industryportal.test.enit.fr"
-$REST_URL_PREFIX ||= "http://#{$REST_HOSTNAME}/"
+$UI_HOSTNAME ||= "industryportal.enit.fr"
+$REST_URL_PREFIX ||= "https://#{$REST_HOSTNAME}/"
 #$REST_HOSTNAME ||= "industryportal.test.enit.fr"
 #$REST_PORT ||= '8080'
 #$UI_HOSTNAME ||= "industryportal.test.enit.fr"
@@ -28,13 +28,13 @@ $ORG_URL ||= 'http://appliance.ontoportal.org'
 $SITE ||= 'IndustryPortal'
 
 # The URL for the BioPortal Rails UI (this application)
-$UI_URL = "http://#{$UI_HOSTNAME}"
+$UI_URL = "https://#{$UI_HOSTNAME}"
 
 # REST core service address
-$REST_URL ||= "http://#{$REST_HOSTNAME}:#{$REST_PORT}"
+$REST_URL ||= "https://#{$REST_HOSTNAME}:#{$REST_PORT}"
 
 # URL where BioMixer GWT app is located
-$BIOMIXER_URL = "http://#{$UI_HOSTNAME}/BioMixer"
+$BIOMIXER_URL = "https://#{$UI_HOSTNAME}/BioMixer"
 
 # annotator proxy location.  https://github.com/sifrproject/annotators/
 # annotator proxy is running on tomcat which is reverse proxied by nginx
@@ -154,7 +154,7 @@ $ORG_SITE = ($ORG.nil? || $ORG.empty?) ? $SITE : "#{$ORG} #{$SITE}"
 
 #Fairness including config
 $FAIRNESS_DISABLED = false
-$FAIRNESS_URL = "http://services.industryportal.enit.fr/fair/?portal=indutryportal"
+$FAIRNESS_URL = "https://services.industryportal.enit.fr/fair/?portal=indutryportal"
 $HOSTNAME = "industryportal.enit.fr"
 
 #Coloaboration and support
@@ -218,15 +218,6 @@ $TEAM_MEMBERS = [
     isEmailPro: true
   },
   {
-    name: "Abdel Ouadoud Rasmi, MS",
-    role: "",
-    link: "https://github.com/rasmi-aw",
-    avatar: 'https://github.com/IndustryPortal/bioportal_web_ui/blob/master/app/assets/images/team/abdelwadoud_avatar.jpeg?raw=true',
-    description: "Software Engineer",
-    email: "a.rasmi@esi-sba.dz",
-    isEmailPro: true
-  },
-  {
     name: "Arkopaul Sarkar, PhD",
     role: "",
     link: "https://orcid.org/0000-0002-8967-7813",
@@ -240,8 +231,26 @@ $TEAM_MEMBERS = [
     role: "",
     link: "https://github.com/Bouchemel-Nasreddine",
     avatar: 'https://github.com/IndustryPortal/bioportal_web_ui/blob/master/app/assets/images/team/nasreddine_avatar.jpg?raw=true',
+    description: "Research engineer",
+    email: "nasreddine.bouchemel@enit.fr",
+    isEmailPro: true
+  },
+  {
+    name: "Thierry Louge, PhD",
+    role: "",
+    link: "",
+    avatar: 'https://github.com/IndustryPortal/bioportal_web_ui/blob/master/app/assets/images/team/person.png?raw=true',
+    description: "Associate Researcher",
+    email: "tlouge@enit.fr",
+    isEmailPro: true
+  },
+  {
+    name: "Abdel Ouadoud Rasmi, MS",
+    role: "",
+    link: "https://github.com/rasmi-aw",
+    avatar: 'https://github.com/IndustryPortal/bioportal_web_ui/blob/master/app/assets/images/team/abdelwadoud_avatar.jpeg?raw=true',
     description: "Software Engineer",
-    email: "kn_bouchemel@esi.dz",
+    email: "a.rasmi@esi-sba.dz",
     isEmailPro: true
   }
 ]
