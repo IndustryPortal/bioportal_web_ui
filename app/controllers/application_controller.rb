@@ -416,10 +416,11 @@ class ApplicationController < ActionController::Base
       if ignore_concept_param
         # get the top level nodes for the root
         # TODO_REV: Support views? Replace old view call: @ontology.top_level_classes(view)
-        roots = @ontology.explore.roots
+        roots = @ontology.explore.roots(concept_schemes: params[:concept_schemes]) 
         if roots.nil? || roots.empty?
           LOG.add :debug, "Missing roots for #{@ontology.acronym}"
-          not_found
+          @concept = @ontology.explore.classes.collection.first.explore.self(full: true)
+          return
         end
         @root = LinkedData::Client::Models::Class.new(read_only: true)
         @root.children = roots.sort{|x,y| (x.prefLabel || "").downcase <=> (y.prefLabel || "").downcase}
