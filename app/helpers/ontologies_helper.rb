@@ -297,7 +297,7 @@ module OntologiesHelper
 
   # Creates a link based on the status of an ontology submission
   def status_link(submission, sub_ontology = nil, latest = false, target = "")
-    version_text = submission.version.nil? || submission.version.length == 0 ? "unknown" : submission.version
+    version_text = submission.version.nil? || submission.version.to_s.length == 0 ? "unknown" : submission.version
     status_text = " <span class='ontology_submission_status'>" + submission_status2string(submission) + "</span>"
     if sub_ontology.nil?
       sub_ontology = submission.explore.ontology

@@ -55,11 +55,9 @@
           - if @enable_ontolobridge
             #request_term_content.tab-pane
               = render :partial =>'/concepts/request_term'
-%div.show-if-loading.align-self-center.my-auto
-  loading...
 :javascript
   jQuery(document).ready(function(){
-
+    
     jQuery("#classPermalinkModal").on("shown.bs.modal", function (e) {
       var currentPurl = jQuery("a.class-permalink").data("current-purl");
       jQuery("#purl_input").val(currentPurl);

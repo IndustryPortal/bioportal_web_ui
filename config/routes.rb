@@ -15,7 +15,8 @@ Rails.application.routes.draw do
   resources :reviews
 
   get '/mappings/loader' , to: 'mappings#loader'
-  post '/mappings/loader', to: 'mappings#loader_process'
+  #post '/mappings/loader', to: 'mappings#loader_process'
+  post '/mappings/loader_process', to: 'mappings#loader_process'
   get 'mappings/count/:id', to: 'mappings#count', constraints: { id: /.+/ }
   get 'mappings/show_mappings', to: 'mappings#show_mappings'
   get 'mappings/new', to: 'mappings#new'

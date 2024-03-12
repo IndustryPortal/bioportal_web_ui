@@ -1,9 +1,12 @@
 - @title = "Mappings"
-<div style="margin-bottom:350px;">
+<div style="margin-bottom:350px;" class="py-4">
 %h1.tab_header Mappings
+%div#mappings_uploader.my-2
+  = link_to_modal "Upload mappings" , "/mappings/loader", class: "btn btn-primary btn-block",
+    data: { show_modal_title_value: "Mappings bulk load", show_modal_size_value: 'modal-xl'}
 %p.tab_description
   = t('mappings.intro').html_safe
-  = link_to(help_path(anchor: "Mappings_Tab"), id: "mappings-help", "aria-label": "View mappings help") do
+  = link_to(Rails.configuration.settings.links[:mappings], id: "mappings-help", "aria-label": "View mappings help") do
     %i.fas.fa-question-circle.fa-lg{"aria-hidden": "true"}
 %p#mappings_select
   - if @options.empty?
@@ -17,6 +20,5 @@
       %label{for: "display_visualization"} Visualization
     #mapping_load
       %img{src: asset_path("jquery.simple.tree/spinner.gif")}/
-      Loading mappings...
     #mappingCount
 </div>

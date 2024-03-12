@@ -8,4 +8,9 @@
   :javascript
     jQuery(document).ready(function () {
       jQuery("#sd_content").scrollTo(jQuery('a.active'));
-    })
+      hideLoadingSpinner();
+    });
+
+    function hideLoadingSpinner() {
+      jQuery(".show-if-loading").hide(); // Hide the loading spinner element
+    };

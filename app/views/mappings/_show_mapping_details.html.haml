@@ -1,0 +1,11 @@
+#mappingModal.modal.fade{:tabindex => "-1", :role => "document", :aria => {:labelledby => "mappingModalLabel"}, :aria => {:hidden => "true"}, style: "margin-top: 10vh;"}
+  .modal-dialog.modal-lg{:role => "document", style: "max-width: 90vw; "}
+    .modal-content
+      .modal-header
+        %h5#mappingModalLabel.modal-title Mapping Details
+        %button.close{"data-bs-dismiss" => "modal", :aria => {:label => "Close"}}
+          %span{"aria-hidden" => "true"} 
+      .modal-body.table-responsive 
+        %div#mappingDetails
+          -# Data from the API response will be displayed here
+      .modal-footer

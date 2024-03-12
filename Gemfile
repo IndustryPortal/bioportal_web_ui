@@ -77,6 +77,7 @@ gem 'will_paginate', '~> 3.0'
 
 gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'master'
 
+gem 'rack-cors', :require => 'rack/cors'
 
 group :staging, :production do
   # application monitoring
