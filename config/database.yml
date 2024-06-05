@@ -29,9 +29,12 @@ test:
   adapter: mysql2
   encoding: utf8
   database: bioportal_ui
-  username: bp_user
-  password: bp_user!!!
-  socket: localhost
+  username: root
+  password: bp_user
+  host: db
+  # username: bp_user
+  # password: bp_user!!!
+  # socket: localhost
 
 production:
   adapter: mysql2

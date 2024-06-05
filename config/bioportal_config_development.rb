@@ -14,7 +14,7 @@ require_relative 'site_config.rb' if File.exist?('config/site_config.rb')
 $REST_HOSTNAME ||= "data.industryportal.test.enit.fr"
 $REST_PORT ||= ''
 $UI_HOSTNAME ||= "industryportal.enit.fr"
-$REST_URL_PREFIX ||= "https://#{$REST_HOSTNAME}/"
+$REST_URL_PREFIX ||= "http://#{$REST_HOSTNAME}/"
 
 # Organization info
 #$ORG = 'Ontoportal Appliance'
@@ -27,7 +27,7 @@ $SITE ||= 'IndustryPortal'
 $UI_URL = "https://#{$UI_HOSTNAME}"
 
 # REST core service address
-$REST_URL ||= "https://#{$REST_HOSTNAME}:#{$REST_PORT}"
+$REST_URL ||= "http://#{$REST_HOSTNAME}:#{$REST_PORT}"
 
 # URL where BioMixer GWT app is located
 $BIOMIXER_URL = "https://#{$UI_HOSTNAME}/BioMixer"
@@ -245,7 +245,7 @@ $TEAM_MEMBERS = [
     role: "",
     link: "",
     avatar: 'https://github.com/IndustryPortal/bioportal_web_ui/blob/master/app/assets/images/team/person.png?raw=true',
-    description: "Software Engineer",
+    description: "Associate Researcher",
     email: "kn_bouchemel@esi.dz",
     isEmailPro: true
   }
@@ -268,4 +268,4 @@ $CONTRIBUTORS = [
 $UI_THEME = :industryportal
 
 #OntoMapper Url
-$ONTOMAPPER_URL = "http://#{$UI_HOSTNAME}/ontomapper/"
+$ONTOMAPPER_URL = "http://services.industryportal.test.enit.fr/ontomapper/"
