@@ -112,9 +112,6 @@ class MappingsController < ApplicationController
 
       redirect_back fallback_location: root_path
 
-
-      puts "response : #{response.inspect}"
-
       if response.code.to_i == 200
         # Handle a successful response
         flash[:notice] = 'File uploaded and processed successfully!'

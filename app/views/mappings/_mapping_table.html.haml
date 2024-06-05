@@ -20,8 +20,6 @@
 - else
 - grouped_mappings.each do |source, mappings_for_source|
   - if mappings_for_source.any?
-  - puts "source is:"
-    - puts source
     - if source == "LOOM/SAME_URI"
       %h2{style: 'margin-top: 20px;'}= "Portal mappings"
     - else
@@ -37,8 +35,6 @@
           %th{:class => 'delete_mappings_column'} Actions
       %tbody#concept_mappings_table_content
         - mappings_for_source.each do |map|
-          - puts "mapping for source:"
-          - puts map.inspect
           = render partial: 'mappings/show_line', locals: { map: map, concept: @concept }
 
 :javascript

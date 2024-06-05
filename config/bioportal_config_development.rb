@@ -13,12 +13,8 @@ require_relative 'site_config.rb' if File.exist?('config/site_config.rb')
 # Ideally it should be set to HOSTNAME but we fall back to using IP address if HOSTNAME is not manually set.
 $REST_HOSTNAME ||= "data.industryportal.test.enit.fr"
 $REST_PORT ||= ''
-$UI_HOSTNAME ||= "industryportal.test.enit.fr"
+$UI_HOSTNAME ||= "industryportal.enit.fr"
 $REST_URL_PREFIX ||= "http://#{$REST_HOSTNAME}/"
-#$REST_HOSTNAME ||= "industryportal.test.enit.fr"
-#$REST_PORT ||= '8080'
-#$UI_HOSTNAME ||= "industryportal.test.enit.fr"
-#$REST_URL_PREFIX ||= "http://#{$REST_HOSTNAME}:#{$REST_PORT}/"
 
 # Organization info
 #$ORG = 'Ontoportal Appliance'
@@ -28,15 +24,15 @@ $ORG_URL ||= 'http://appliance.ontoportal.org'
 $SITE ||= 'IndustryPortal'
 
 # The URL for the BioPortal Rails UI (this application)
-$UI_URL = "http://#{$UI_HOSTNAME}"
+$UI_URL = "https://#{$UI_HOSTNAME}"
 
 # REST core service address
 $REST_URL ||= "http://#{$REST_HOSTNAME}:#{$REST_PORT}"
 
 # URL where BioMixer GWT app is located
-$BIOMIXER_URL = "http://#{$UI_HOSTNAME}/BioMixer"
+$BIOMIXER_URL = "https://#{$UI_HOSTNAME}/BioMixer"
 
-# annotator proxy location.  https://github.com/sifrproject/annotators/
+# annotator proxy location.  httpss://github.com/sifrproject/annotators/
 # annotator proxy is running on tomcat which is reverse proxied by nginx
 $PROXY_URL = "#{$REST_URL}"
 
@@ -45,7 +41,7 @@ $PURL_ENABLED = false
 
 # The PURL URL is generated using this prefix + the abbreviation for an ontology.
 # The PURL URL generation algorithm can be altered in app/models/ontology_wrapper.rb
-$PURL_PREFIX = 'http://purl.bioontology.org/ontology'
+$PURL_PREFIX = 'https://purl.bioontology.org/ontology'
 
 # If your BioPortal installation includes Annotator set this to false
 $ANNOTATOR_DISABLED = false
@@ -116,7 +112,7 @@ $ERROR_EMAIL ||= 'industryportal-support@enit.fr'
 
 # reCAPTCHA
 # In order to use reCAPTCHA on the user account creation page:
-#    1. Obtain a key from reCAPTCHA: http://recaptcha.net
+#    1. Obtain a key from reCAPTCHA: https://recaptcha.net
 #    2. Include the corresponding keys below (between the single quotes)
 #    3. Set the USE_RECAPTCHA option to 'true'
 ENV['USE_RECAPTCHA'] ||= 'false'
@@ -154,7 +150,7 @@ $ORG_SITE = ($ORG.nil? || $ORG.empty?) ? $SITE : "#{$ORG} #{$SITE}"
 
 #Fairness including config
 $FAIRNESS_DISABLED = false
-$FAIRNESS_URL = "http://services.industryportal.enit.fr/fair/?portal=indutryportal"
+$FAIRNESS_URL = "https://services.industryportal.enit.fr/fair/?portal=indutryportal"
 $HOSTNAME = "industryportal.enit.fr"
 
 #Coloaboration and support
@@ -243,6 +239,15 @@ $TEAM_MEMBERS = [
     description: "Software Engineer",
     email: "kn_bouchemel@esi.dz",
     isEmailPro: true
+  },
+  {
+    name: "Thierry Louge, PhD",
+    role: "",
+    link: "",
+    avatar: 'https://github.com/IndustryPortal/bioportal_web_ui/blob/master/app/assets/images/team/person.png?raw=true',
+    description: "Associate Researcher",
+    email: "kn_bouchemel@esi.dz",
+    isEmailPro: true
   }
 ]
 
@@ -263,4 +268,4 @@ $CONTRIBUTORS = [
 $UI_THEME = :industryportal
 
 #OntoMapper Url
-$ONTOMAPPER_URL = "http://#{$UI_HOSTNAME}/ontomapper/"
+$ONTOMAPPER_URL = "http://services.industryportal.test.enit.fr/ontomapper/"

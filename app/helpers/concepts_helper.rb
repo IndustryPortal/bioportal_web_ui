@@ -96,7 +96,7 @@ module ConceptsHelper
   def get_concept_id(params, concept, root)
     if concept_id_param_exist?(params)
       concept.nil? ? '' : concept.id
-    elsif !root.children.first.nil?
+    elsif root && !root.children.first.nil?
       root.children.first.id
     end
   end

@@ -17,11 +17,10 @@
 development:
   adapter: mysql2
   encoding: utf8
-  socket: /opt/lampp/var/mysql/mysql.sock
   database: bioportal_ui
-  username: bp_user
-  password: bp_user!!!
-  host: localhost
+  username: root
+  password: bp_user
+  host: db
 
 # Warning: The database defined as 'test' will be erased and
 # re-generated from your development database when you run 'rake'.
@@ -30,9 +29,12 @@ test:
   adapter: mysql2
   encoding: utf8
   database: bioportal_ui
-  username: bp_user
-  password: bp_user!!!
-  socket: localhost
+  username: root
+  password: bp_user
+  host: db
+  # username: bp_user
+  # password: bp_user!!!
+  # socket: localhost
 
 production:
   adapter: mysql2
