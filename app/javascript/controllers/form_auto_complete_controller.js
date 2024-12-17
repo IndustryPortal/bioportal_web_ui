@@ -32,7 +32,7 @@ export default class extends Controller {
                 extraParams: this.extra_params,
                 lineSeparator: "~!~",
                 matchSubset: 0,
-                mustMatch: true,
+                mustMatch: false,
                 sortRestuls: false,
                 minChars: 3,
                 maxItemsToShow: 20,
@@ -43,11 +43,27 @@ export default class extends Controller {
             })
         })
 
+        this.element.addEventListener('blur', () => {
+            console.log(jQuery('map_to_external_ontology'))
+            const typedValue = jQuery(this.element).val();
+            if (typedValue) {
+                // Update hidden fields to store custom input
+                const inputName = jQuery(this.element).attr('name');
+                jQuery(`input[id="map_to_external_class"]`).val(typedValue);
+                console.log(typedValue)
+
+                //this.#emitOnCustomInput(typedValue);
+            }
+        });
+
         let html = "";
 
         const inputName = jQuery(this.element).attr('name');
-        if (document.getElementById(inputName + "_bioportal_concept_id") == null)
+        if (document.getElementById(inputName + "_bioportal_concept_id") == null) {
             html += `<input type='hidden' name='${inputName}_bioportal_concept_id' id='${inputName}_bioportal_concept_id'>`;
+            html += `<input type='hidden' name='${inputName}_bioportal_concept_id' id='map_to_external_class'>`;
+        
+        }
 
         if (document.getElementById(inputName + "_bioportal_ontology_id") == null)
             html += `<input type='hidden' name='${inputName}_bioportal_ontology_id' id='${inputName}_bioportal_ontology_id'>`;
@@ -59,6 +75,12 @@ export default class extends Controller {
             html += `<input type='hidden' name='${inputName}_bioportal_preferred_name' id='${inputName}_bioportal_preferred_name'>`;
 
         jQuery(this.element).after(html);
+    }
+
+    #emitOnCustomInput(value) {
+        const customInputEvent = new CustomEvent('customInput', { detail: { value } });
+        console.log(customInputEvent)
+        this.element.dispatchEvent(customInputEvent);
     }
 
     formatItem(row) {
@@ -133,6 +155,7 @@ export default class extends Controller {
         jQuery(`input[name="${input_name}_bioportal_preferred_name"]`).val(li.extra[4]);
         this.#emitOnSelect()
     }
+
 
     #emitOnSelect() {
         this.element.dispatchEvent(new Event('selected'))

@@ -1,42 +1,127 @@
 :javascript
   var BP_INTERNAL_SEARCH_SERVER = "#{$UI_URL}";
 
-%div
-  %span#create_mapping_spinner.card.p-3.text-center
-    = loading_spinner
+%div.form-group#mapping_set_modal
+  %label Mapping Set
+  %div#display_options.mb-3
+    %div.form-group
+      %div.custom-control.custom-radio.custom-control-inline
+        = radio_button_tag "mapping_set_type", "existing", type?('existing'), {id: 'existing_form_radio', class: 'mapping_set_radio custom-control-input', data: {target: "#existing_form"}}
+        %label.custom-control-label{for: "existing_form_radio"} Choose existing mapping set
+      %div.custom-control.custom-radio.custom-control-inline
+        = radio_button_tag "mapping_set_type", "new", type?('new'), {id: 'new_form_radio', class: 'mapping_set_radio custom-control-input', data: {target: "#new_form"}}
+        %label.custom-control-label{for: "new_form_radio"} Create new one
 
-  = render_alerts_container
+  / Fields for existing mapping set
+  %div#existing_form.mapping_set_form{style: "display:  #{type?('existing') ? 'block':'none'}"}
+    %div.form-group
+      %label{for: "existing_mapping"} Existing Mapping Set:
+      = select_tag :existing_mapping, options_for_select(@existing_mapping_sets.map { |item| [item[:mapping_set_id], item[:mapping_set_id]] }), class: 'form-control', prompt: "Select an existing mapping set"
 
-  = form_with url: form_url, method: 'post', data:{turbo: true} do
-    = hidden_field_tag :map_from_bioportal_ontology_id, @ontology_from.acronym
+  / Fields for new mapping set
+  %div#new_form.mapping_set_form{style: "display:  #{type?('new') ? 'block':'none'}"}
     %div.form-group
-      %label{for: "map_to"} Source class
-      - from_name = :map_from_bioportal_full_id
-      - if @concept_from
-        = text_field_tag('', @concept_from.id, class: "form-control", disabled: true)
-        = hidden_field_tag from_name, @concept_from.id
-      - else
-        = render partial: 'shared/concept_picker', locals: {name: from_name, concept_id: @concept_from.id, ontology_acronym: @ontology_from.acronym, include_definition: false}
-    = render partial: "mapping_type_selector", locals: {interportal_options: @interportal_options, concept_to: @concept_to}
+      %label{for: "new_mapping"} New Mapping Name:
+      = text_field_tag :new_mapping, nil, class: 'form-control', placeholder: "Enter new mapping name"
 
-    %hr.w-100
+  %button{type: "submit", class: "btn btn-primary", id: "submit_button"} Next
 
-    %div.form-group
-      %label{for: "mapping_name"} Mapping description (name)
-      = text_field_tag('mapping[name]',@mapping_name, class: "form-control")
-    %div.form-group
-      %label{for: "mapping_source_contact_info"} Contact info
-      = text_field_tag('mapping[source_contact_info]',@mapping_source_contact_info, class: "form-control")
-    %div.form-group
-      %label{for: "mapping_source_name"} Source name (Mapping set id)
-      = text_field_tag('mapping[source_name]',@mapping_source_name, class: "form-control")
-    %div.form-group
-      %label{for: "mapping_comment"} Comment
-      = text_area_tag('mapping[comment]',@mapping_comment, rows: 5, class: "form-control")
-    %div.form-group
-      %label{for: "mapping_relation"} Mapping relation type
-      = select("mapping", "relation", options_for_select(@mapping_relation_options, @selected_relation), {}, class: "form-control")
+%div#mapping_form
+  %label{for: "mapping_set_id"} maping set
+  = text_field_tag('mapping_set_id', nil, class: "form-control", id: "mapping_set_id", disabled: true)
+  = hidden_field_tag :set_id, @set_id, id: 'set_id'
+  = render partial: "create_mapping", locals: { form_url: mappings_path }
 
-    %div.form-group
-      = submit_tag "Save" , class:'btn btn-success btn-block'
 
+%div#ontomapper-config{ 
+  data: { 
+    ontomapper_url: "#{ @ontomapper_url }",
+    ontomapper_user: "#{ @ontomapper_user }",
+    ontomapper_key: "#{ @ontomapper_key }"
+  }
+}
+
+
+:javascript
+
+  var $ontomapperConfig = jQuery("#ontomapper-config");
+  var $ONTOMAPPER_URL = $ontomapperConfig.data("ontomapper-url");
+  var $ONTOMAPPER_USER = $ontomapperConfig.data("ontomapper-user");
+  var $ONTOMAPPER_KEY = $ontomapperConfig.data("ontomapper-key");
+
+  jQuery(document).ready(() => { 
+
+    jQuery("#mapping_set_modal").show(); // Show the first part
+    jQuery("#mapping_form").hide();    
+
+    jQuery(".mapping_set_radio").live("click", function () {
+      const targetForm = jQuery(this).data("target");
+
+        // Hide all forms
+      jQuery("div.mapping_set_form").hide();
+
+        // Show the targeted form
+      jQuery(targetForm).show();
+    });
+    // Handle form submission for new mapping set
+    jQuery("#submit_button").live("click", function (e) {
+      e.preventDefault(); // Prevent the default form submission
+
+      // Get the selected mapping set type
+      const mappingSetType = jQuery("input[name='mapping_set_type']:checked").val();
+
+      if (mappingSetType === "existing") {
+            // Get the selected existing mapping set
+          const existingMapping = jQuery("select[name='existing_mapping']").val();
+
+          // Make sure an existing mapping set is selected
+          if (!existingMapping) {
+            alert("Please select an existing mapping set.");
+            return;
+          }
+
+         
+            // Set the set_id in the hidden field
+          //jQuery("#set_id_hidden").val(#{@existing_mapping_sets.to_json}.find(function(mappingSet) {
+          //  return mappingSet.mapping_set_id === existingMapping;
+          //}););
+          
+
+          jQuery("#mapping_set_id").val(existingMapping);
+          jQuery("#mapping_set_modal").hide(); 
+          jQuery("#mapping_form").show(); 
+                
+      }
+      if (mappingSetType === "new") {
+        // Get the new mapping name
+        const newMappingName = jQuery("input[name='new_mapping']").val();
+
+        // Make sure the new mapping name is provided
+        if (!newMappingName) {
+          alert("Please enter a new mapping name.");
+          return;
+        }
+
+        // Send POST request to create the new mapping set
+        jQuery.ajax({
+          url: $ONTOMAPPER_URL + "set?username=" + $ONTOMAPPER_USER + "&apikey=" + $ONTOMAPPER_KEY,
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify([{ mapping_set_id: newMappingName }]),
+          success: function(response) {
+            // Handle success            
+            alert("New mapping set created successfully. Set ID: " + response.set_id);
+            jQuery("#mapping_set_id").val(newMappingName);
+            jQuery("#mapping_set_modal").hide(); 
+            jQuery("#mapping_form").show(); 
+
+          },
+          error: function(xhr, status, error) {
+            // Handle error
+            alert("Failed to create a new mapping set: " + xhr.responseText);
+          }
+        });
+      }
+    });
+
+  });

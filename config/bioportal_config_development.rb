@@ -14,7 +14,7 @@ require_relative 'site_config.rb' if File.exist?('config/site_config.rb')
 $REST_HOSTNAME ||= "data.industryportal.test.enit.fr"
 $REST_PORT ||= ''
 $UI_HOSTNAME ||= "industryportal.enit.fr"
-$REST_URL_PREFIX ||= "https://#{$REST_HOSTNAME}/"
+$REST_URL_PREFIX ||= "http://#{$REST_HOSTNAME}/"
 
 # Organization info
 #$ORG = 'Ontoportal Appliance'
@@ -27,7 +27,7 @@ $SITE ||= 'IndustryPortal'
 $UI_URL = "https://#{$UI_HOSTNAME}"
 
 # REST core service address
-$REST_URL ||= "https://#{$REST_HOSTNAME}:#{$REST_PORT}"
+$REST_URL ||= "http://#{$REST_HOSTNAME}:#{$REST_PORT}"
 
 # URL where BioMixer GWT app is located
 $BIOMIXER_URL = "https://#{$UI_HOSTNAME}/BioMixer"
@@ -52,7 +52,7 @@ $RESOURCE_INDEX_DISABLED = true
 # Unique string representing the UI's id for use with the BioPortal Core
 #$API_KEY ||= '1de0a270-29c5-4dda-b043-7c3580628cd5'
 #$API_KEY ||= '019adb70-1d64-41b7-8f6e-8f7e5eb54942'
-$API_KEY ||= '6ed1c997-384c-422f-ad07-2b0b64f2f064'
+$API_KEY ||= '5707e117-85bd-4e9c-8c5f-4976907f73d4'
 # Max number of children to return when rendering a tree view
 $MAX_CHILDREN = 2500
 
@@ -268,4 +268,6 @@ $CONTRIBUTORS = [
 $UI_THEME = :industryportal
 
 #OntoMapper Url
-$ONTOMAPPER_URL = "http://#{$UI_HOSTNAME}/ontomapper/"
+$ONTOMAPPER_URL = "http://services.industryportal.test.enit.fr/ontomapper/"
+$ONTOMAPPER_USER = "ontomapper"
+$ONTOMAPPER_KEY = "5707e117-85bd-4e9c-8c5f-4976907f73d4"

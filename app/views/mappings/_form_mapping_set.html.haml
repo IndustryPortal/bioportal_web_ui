@@ -1,0 +1,25 @@
+:javascript
+  var BP_INTERNAL_SEARCH_SERVER = "#{$UI_URL}";
+
+%div.modal.fade#mappingModal{tabindex: "-1", role: "dialog"}
+  %div.modal-dialog{role: "document"}
+    %div.modal-content
+      %div.modal-header
+        %h5.modal-title Choose or Create Mapping Set
+        %button.close{"data-dismiss" => "modal", "aria-label" => "Close"}
+          %span{"aria-hidden" => "true"} &times;
+
+      %div.modal-body
+        = render_alerts_container
+        = form_with url: form_url, method: 'post', data: { turbo: true }, local: true do
+          %div.form-group
+            %label{for: "mapping_set_choice"} Choose an existing mapping set
+            = select_tag('mapping_set[choice]', options_for_select(@existing_mapping_sets, @selected_mapping_set), class: "form-control")
+
+          %div.form-group.mt-3
+            %label{for: "new_mapping_set_label"} Or create a new mapping set
+            = text_field_tag('mapping_set[new_label]', '', class: "form-control", placeholder: "Enter new mapping set label")
+
+      %div.modal-footer
+        = submit_tag "Save", class: "btn btn-success"
+        %button.btn.btn-secondary{"data-dismiss" => "modal"} Cancel

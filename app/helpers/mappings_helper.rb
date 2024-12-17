@@ -165,7 +165,7 @@ module MappingsHelper
   end
 
   def get_mappings_target_params
-    mapping_type = Array(params[:mapping_type]).first
+    mapping_type = 'external' #Array(params[:mapping_type]).first
     external = true
     case mapping_type
     when 'interportal'
@@ -173,7 +173,7 @@ module MappingsHelper
       concept_to_id = params[:map_to_interportal_class]
     when 'external'
       ontology_to = params[:map_to_external_ontology]
-      concept_to_id = params[:map_to_external_class]
+      concept_to_id = params[:map_to]
     else
       ontology_to = params[:map_to_bioportal_ontology_id]
       concept_to_id = params[:map_to_bioportal_full_id]

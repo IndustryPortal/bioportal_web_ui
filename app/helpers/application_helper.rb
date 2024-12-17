@@ -1,6 +1,5 @@
 # Methods added to this helper will be available to all templates in the application.
 
-require 'uri'
 require 'cgi'
 require 'digest/sha1'
 require 'pry' # used in a rescue
@@ -28,7 +27,7 @@ module ApplicationHelper
   end
 
   def encode_param(string)
-    return URI.escape(string, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+    return CGI.escape(string)
   end
 
   def escape(string)
@@ -430,10 +429,10 @@ module ApplicationHelper
     return "/ontologies/#{ont_acronym}"
   end
   def bp_class_link(cls_id, ont_acronym)
-    return "#{bp_ont_link(ont_acronym)}?p=classes&conceptid=#{URI.escape(cls_id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"
+    return "#{bp_ont_link(ont_acronym)}?p=classes&conceptid=#{CGI.escape(cls_id)}"
   end
   def bp_scheme_link(scheme_id, ont_acronym)
-    return "#{bp_ont_link(ont_acronym)}?p=schemes&schemeid=#{URI.escape(scheme_id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"
+    return "#{bp_ont_link(ont_acronym)}?p=schemes&schemeid=#{CGI.escape(scheme_id)}"
   end
   def get_link_for_cls_ajax(cls_id, ont_acronym, target=nil)
     # Note: bp_ajax_controller.ajax_process_cls will try to resolve class labels.

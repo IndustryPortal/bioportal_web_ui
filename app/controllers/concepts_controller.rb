@@ -156,13 +156,13 @@ class ConceptsController < ApplicationController
   def fetch_mappings(acronym, class_uri)
     # Retrieve the URL and API key from the configuration file
     ontomapper_url = $ONTOMAPPER_URL
-    puts "ontomapper url is: #{ontomapper_url} "
+    ontomapper_key = $ONTOMAPPER_KEY
+    ontomapper_user = $ONTOMAPPER_USER
 
     # Build the API endpoint URL
-    endpoint_url = "#{ontomapper_url}/manchester/#{acronym}/getClassRelations?username=nass&apikey=23075fb5-0559-4cb1-9888-742ea7b27e6f&classUri=#{CGI.escape(class_uri)}"
+    endpoint_url = "#{ontomapper_url}/manchester/#{acronym}/getClassRelations?username=#{ontomapper_user}&apikey=#{ontomapper_key}&classUri=#{CGI.escape(class_uri)}"
 
-
-    puts "endpoint url is: #{endpoint_url} "
+    puts endpoint_url
 
     # Send a GET request to the API endpoint
     uri = URI(endpoint_url)

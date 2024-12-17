@@ -136,9 +136,11 @@ class MappingsController < ApplicationController
 
   def send_file_content(file_content)
   
-        # Define the endpoint URL
-        ontomapper_url = $ONTOMAPPER_URL
-    endpoint_url = URI.parse("#{ontomapper_url}/bulk?apikey=23075fb5-0559-4cb1-9888-742ea7b27e6f&username=nass")
+    ontomapper_url = $ONTOMAPPER_URL
+    ontomapper_key = $ONTOMAPPER_KEY
+    ontomapper_user = $ONTOMAPPER_USER
+
+    endpoint_url = URI.parse("#{ontomapper_url}/bulk?apikey=#{ontomapper_key}&username=#{ontomapper_user}")
 
     # Create a hash to represent the request body with the 'mappingsFile' field
     request_body = { 'mappingsFile' => file_content }
@@ -232,9 +234,57 @@ class MappingsController < ApplicationController
   end
 
   def new
+
+    @ontomapper_url = $ONTOMAPPER_URL
+    @ontomapper_key = $ONTOMAPPER_KEY
+    @ontomapper_user = $ONTOMAPPER_USER
+
+    @existing_mapping_sets = fetch_existing_mapping_sets
     mapping_form
     respond_to do |format|
       format.html { render action: 'new', layout: false }
+    end
+  end
+
+  def fetch_existing_mapping_sets
+    endpoint_url = URI.parse("#{@ontomapper_url}/set?apikey=#{@ontomapper_key}&username=#{@ontomapper_user}")
+    
+    # Perform the HTTP GET request
+    response = Net::HTTP.get_response(endpoint_url)
+    
+    if response.is_a?(Net::HTTPSuccess)
+      # Parse the JSON response
+      data = JSON.parse(response.body)
+      
+      # Extract id, mapping_set_id from each object
+      data.map { |item| { id: item["id"], mapping_set_id: item["mapping_set_id"] } }
+    else
+      Rails.logger.error("Failed to fetch mapping sets: #{response.code} #{response.message}")
+      [] # Return an empty array if the request fails
+    end
+  rescue StandardError => e
+    Rails.logger.error("Error fetching mapping sets: #{e.message}")
+    [] # Return an empty array in case of an exception
+  end
+
+  def create_new_mapping_set(name)
+    url = URI("https://services.industryportal.enit.fr/ontomapper/set")
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+  
+    request = Net::HTTP::Post.new(url)
+    request["Content-Type"] = "application/json"
+    request.body = { name: name }.to_json
+  
+    begin
+      response = http.request(request)
+      if response.is_a?(Net::HTTPSuccess)
+        { success: true }
+      else
+        { success: false, error: "#{response.code} #{response.message}" }
+      end
+    rescue StandardError => e
+      { success: false, error: e.message }
     end
   end
 
@@ -242,6 +292,12 @@ class MappingsController < ApplicationController
   # POST /mappings.xml
   def create
     values, @concept = mapping_form_values
+    # classes_ids = values[:classes]
+    # classes_array = [
+    #   [classes_ids[0], values[:subject_source_id]],
+    #   [classes_ids[0], ""]
+    # ]
+    # values[:classes] = classes_array
     errors = valid_values?(values)
     if errors.empty?
       @mapping, = LinkedData::Client::Models::Mapping.new(values: values)
@@ -355,8 +411,13 @@ class MappingsController < ApplicationController
       @interportal_options.push([key, value['api']])
     end
 
+    @mapping_set_id = params[:mapping_set_id]
+    @set_id = @existing_mapping_sets.find { |set| set[:mapping_set_id] == @mapping_set_id }&.[](:id)
 
     @mapping_relation_options = [
+      ["Subclass Of (rdfs:subClassOf)", "http://www.w3.org/2000/01/rdf-schema#subClassOf"],
+      ["Equivalent Class (owl:equivalentClass)", "http://www.w3.org/2002/07/owl#equivalentClass"],
+      ["Disjoint With (owl:disjointWith)", "http://www.w3.org/2002/07/owl#disjointWith"],    
       ["Identical (skos:exactMatch)", "http://www.w3.org/2004/02/skos/core#exactMatch"],
       ["Similar (skos:closeMatch)", "http://www.w3.org/2004/02/skos/core#closeMatch"],
       ["Related (skos:relatedMatch)", "http://www.w3.org/2004/02/skos/core#relatedMatch"],
@@ -371,6 +432,7 @@ class MappingsController < ApplicationController
     @mapping_source_contact_info = mapping.process&.source_contact_info
     @mapping_source = mapping.process&.source
     @selected_relation = mapping.process.nil? ? @mapping_relation_options.first : mapping.process.relation.first
+
   end
 
   def mapping_form_values
@@ -379,8 +441,8 @@ class MappingsController < ApplicationController
     source = source_ontology.explore.single_class(params[:map_from_bioportal_full_id])
     values = {
       classes: [
-        source.id,
-        target
+        [source.id, source_ontology.id],
+        [target, "ext:" + target_ontology]
       ],
       subject_source_id: source_ontology.id,
       object_source_id: target_ontology,
@@ -392,7 +454,6 @@ class MappingsController < ApplicationController
       name: params[:mapping][:name],
       comment: params[:mapping][:comment]
     }
-
     [values, source]
   end
 
@@ -402,11 +463,29 @@ class MappingsController < ApplicationController
     mapping
   end
 
+  # def valid_values?(values)
+  #   errors = []
+  #   if values[:classes].reject(&:blank?).size != 2
+  #     errors << 'Source and target concepts need to be specified'
+  #   end
+  #   errors
+  # end
+
   def valid_values?(values)
     errors = []
-    if values[:classes].reject(&:blank?).size != 2
-      errors << 'Source and target concepts need to be specified'
+
+    # Ensure classes is an array with exactly two arrays
+    if values[:classes].nil? || !values[:classes].is_a?(Array) || values[:classes].size != 2
+      errors << 'Classes must contain exactly two arrays'
+    else
+      # Validate each sub-array in classes
+      values[:classes].each_with_index do |sub_array, index|
+        if sub_array.nil? || !sub_array.is_a?(Array) || sub_array.reject(&:blank?).empty?
+          errors << "Sub-array #{index + 1} in classes must contain valid values"
+        end
+      end
     end
+  
     errors
   end
 end

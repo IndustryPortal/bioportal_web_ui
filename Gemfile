@@ -59,7 +59,7 @@ gem 'haml', '~> 5.1'
 gem 'i18n'
 gem 'iconv'
 gem 'multi_json'
-gem 'mysql2', '0.5.2'
+gem 'mysql2', '0.5.3'
 gem 'oj'
 gem 'open_uri_redirections'
 gem 'pry'
@@ -75,8 +75,7 @@ gem 'view_component', '~> 2.72'
 gem 'turnout'
 gem 'will_paginate', '~> 3.0'
 
-gem 'ontologies_api_client', git: 'https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git', branch: 'master'
-
+gem 'ontologies_api_client', git: 'https://github.com/IndustryPortal/ontologies_api_ruby_client', branch: 'fixes'
 gem 'rack-cors', :require => 'rack/cors'
 
 group :staging, :production do

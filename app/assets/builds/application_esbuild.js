@@ -3348,10 +3348,11 @@
   __publicField(turbo_modal_component_controller_default, "targets", ["content"]);
 
   // app/javascript/controllers/form_auto_complete_controller.js
-  var _emitOnSelect, emitOnSelect_fn, _truncateText, truncateText_fn;
+  var _emitOnCustomInput, emitOnCustomInput_fn, _emitOnSelect, emitOnSelect_fn, _truncateText, truncateText_fn;
   var form_auto_complete_controller_default = class extends Controller {
     constructor() {
       super(...arguments);
+      __privateAdd(this, _emitOnCustomInput);
       __privateAdd(this, _emitOnSelect);
       __privateAdd(this, _truncateText);
     }
@@ -3372,7 +3373,7 @@
           extraParams: this.extra_params,
           lineSeparator: "~!~",
           matchSubset: 0,
-          mustMatch: true,
+          mustMatch: false,
           sortRestuls: false,
           minChars: 3,
           maxItemsToShow: 20,
@@ -3382,10 +3383,21 @@
           formatItem: this.formatItem.bind(this)
         });
       });
+      this.element.addEventListener("blur", () => {
+        console.log(jQuery("map_to_external_ontology"));
+        const typedValue = jQuery(this.element).val();
+        if (typedValue) {
+          const inputName2 = jQuery(this.element).attr("name");
+          jQuery(`input[id="map_to_external_class"]`).val(typedValue);
+          console.log(typedValue);
+        }
+      });
       let html = "";
       const inputName = jQuery(this.element).attr("name");
-      if (document.getElementById(inputName + "_bioportal_concept_id") == null)
+      if (document.getElementById(inputName + "_bioportal_concept_id") == null) {
         html += `<input type='hidden' name='${inputName}_bioportal_concept_id' id='${inputName}_bioportal_concept_id'>`;
+        html += `<input type='hidden' name='${inputName}_bioportal_concept_id' id='map_to_external_class'>`;
+      }
       if (document.getElementById(inputName + "_bioportal_ontology_id") == null)
         html += `<input type='hidden' name='${inputName}_bioportal_ontology_id' id='${inputName}_bioportal_ontology_id'>`;
       if (document.getElementById(inputName + "_bioportal_full_id") == null)
@@ -3448,6 +3460,12 @@
       jQuery(`input[name="${input_name}_bioportal_preferred_name"]`).val(li.extra[4]);
       __privateMethod(this, _emitOnSelect, emitOnSelect_fn).call(this);
     }
+  };
+  _emitOnCustomInput = new WeakSet();
+  emitOnCustomInput_fn = function(value) {
+    const customInputEvent = new CustomEvent("customInput", { detail: { value } });
+    console.log(customInputEvent);
+    this.element.dispatchEvent(customInputEvent);
   };
   _emitOnSelect = new WeakSet();
   emitOnSelect_fn = function() {

@@ -1,14 +1,12 @@
 GIT
-  remote: https://github.com/ontoportal-lirmm/ontologies_api_ruby_client.git
-  revision: fe929a4dd156920d60ecde9e8f9ef30a2cf5088e
-  branch: master
+  remote: https://github.com/IndustryPortal/ontologies_api_ruby_client
+  revision: 27bd3d62bf99f98708708396c982b962d4eeb432
+  branch: fixes
   specs:
-    ontologies_api_client (2.2.0)
-      activesupport
+    ontologies_api_client (2.0.3)
+      activesupport (~> 7.0.3)
       excon
-      faraday
-      faraday-excon (~> 2.0.0)
-      faraday-multipart
+      faraday (= 1.4.3)
       lz4-ruby
       multi_json
       oj
@@ -144,17 +142,21 @@ GEM
     erubi (1.12.0)
     erubis (2.7.0)
     eventmachine (1.2.7)
-    excon (0.99.0)
+    excon (1.2.2)
     execjs (2.8.1)
-    faraday (2.0.1)
-      faraday-net_http (~> 2.0)
+    faraday (1.4.3)
+      faraday-em_http (~> 1.0)
+      faraday-em_synchrony (~> 1.0)
+      faraday-excon (~> 1.1)
+      faraday-net_http (~> 1.0)
+      faraday-net_http_persistent (~> 1.1)
+      multipart-post (>= 1.2, < 3)
       ruby2_keywords (>= 0.0.4)
-    faraday-excon (2.0.0)
-      excon (>= 0.27.4)
-      faraday (~> 2.0.0.alpha.pre.2)
-    faraday-multipart (1.0.4)
-      multipart-post (~> 2)
-    faraday-net_http (2.1.0)
+    faraday-em_http (1.0.0)
+    faraday-em_synchrony (1.0.0)
+    faraday-excon (1.1.0)
+    faraday-net_http (1.0.2)
+    faraday-net_http_persistent (1.2.0)
     ffi (1.15.5)
     flamegraph (0.9.5)
     globalid (1.1.0)
@@ -211,8 +213,8 @@ GEM
     minitest (5.17.0)
     msgpack (1.6.0)
     multi_json (1.15.0)
-    multipart-post (2.3.0)
-    mysql2 (0.5.2)
+    multipart-post (2.4.1)
+    mysql2 (0.5.3)
     net-imap (0.3.4)
       date
       net-protocol
@@ -454,7 +456,7 @@ DEPENDENCIES
   jsbundling-rails
   listen
   multi_json
-  mysql2 (= 0.5.2)
+  mysql2 (= 0.5.3)
   newrelic_rpm
   oj
   ontologies_api_client!
